@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  zoho-parser:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - ZOHO_CLIENT_ID=${ZOHO_CLIENT_ID}
+      - ZOHO_CLIENT_SECRET=${ZOHO_CLIENT_SECRET}
+      - ZOHO_REDIRECT_URI=${ZOHO_REDIRECT_URI}
+      - ZOHO_REFRESH_TOKEN=${ZOHO_REFRESH_TOKEN}
+      - ZOHO_REGION=${ZOHO_REGION:-US}
+      - APP_HOST=0.0.0.0
+      - APP_PORT=8000
+      - DEBUG=${DEBUG:-False}
+      - MAX_FILE_SIZE_MB=${MAX_FILE_SIZE_MB:-10}
+    env_file:
+      - .env
+    volumes:
+      - ./app:/app/app
+    restart: unless-stopped
