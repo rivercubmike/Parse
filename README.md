@@ -2,6 +2,8 @@
 
 A Python-based system to parse data from PDF and Excel uploads, extract lead information, and automatically create leads in ZOHO CRM.
 
+**✅ Optimized for AWS EC2 T2 Micro (1GB RAM)** - Perfect for the AWS Free Tier!
+
 ## Features
 
 - **PDF Parsing**: Extracts construction bid project details from Dodge Data & Analytics formatted PDFs
@@ -10,6 +12,20 @@ A Python-based system to parse data from PDF and Excel uploads, extract lead inf
 - **REST API**: FastAPI-based endpoints for file uploads
 - **Docker Support**: Easy deployment with Docker and docker-compose
 - **Preview Mode**: Parse documents without creating leads (for testing)
+- **Memory Optimized**: Aggressive garbage collection and memory limits for T2 Micro (1GB RAM)
+
+## Quick Start - AWS EC2 Deployment
+
+**🚀 Deploy to AWS EC2 T2 Micro in 5 minutes!**
+
+See the complete guide: **[AWS_SETUP_GUIDE.md](AWS_SETUP_GUIDE.md)**
+
+**One-Line Deployment:**
+```bash
+wget https://raw.githubusercontent.com/YOUR_USERNAME/Parse/main/deploy-ec2.sh && chmod +x deploy-ec2.sh && ./deploy-ec2.sh
+```
+
+**Cost**: FREE for 12 months (AWS Free Tier), then ~$8.50/month
 
 ## Project Structure
 

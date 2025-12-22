@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     APP_HOST: str = "0.0.0.0"
     APP_PORT: int = 8000
     DEBUG: bool = False
-    MAX_FILE_SIZE_MB: int = 10
+    MAX_FILE_SIZE_MB: int = 5  # Optimized for T2 Micro (1GB RAM)
 
     # Lead Configuration
     DEFAULT_LEAD_SOURCE: str = "Document Upload"

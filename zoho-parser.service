@@ -1,0 +1,25 @@
+[Unit]
+Description=ZOHO Lead Parser API
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/Parse
+Environment="PATH=/home/ubuntu/Parse/venv/bin"
+ExecStart=/home/ubuntu/Parse/venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 1
+Restart=always
+RestartSec=10
+
+# Memory optimization for T2 Micro (1GB RAM)
+MemoryMax=900M
+MemoryHigh=800M
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=zoho-parser
+
+[Install]
+WantedBy=multi-user.target

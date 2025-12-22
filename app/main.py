@@ -1,5 +1,6 @@
 """FastAPI application for parsing documents and creating ZOHO leads."""
 import os
+import gc
 import tempfile
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.responses import JSONResponse
@@ -9,6 +10,10 @@ from app.parsers.excel_parser import ExcelParser
 from app.zoho.client import ZohoClient
 from app.config import settings
 from app.models import ParsedLeadData
+
+# Memory optimization for T2 Micro (1GB RAM)
+# Enable aggressive garbage collection
+gc.set_threshold(700, 10, 10)
 
 app = FastAPI(
     title="ZOHO Lead Parser",
