@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lead Upload - ZOHO CRM</title>
+    <title>TIDY Services - Lead Upload Portal</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0d5c3e 0%, #1a6b4a 100%);
             min-height: 100vh;
             padding: 20px;
             display: flex;
@@ -22,7 +22,7 @@
         }
 
         .container {
-            max-width: 600px;
+            max-width: 700px;
             width: 100%;
             background: white;
             border-radius: 20px;
@@ -31,10 +31,18 @@
         }
 
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0d5c3e 0%, #1a6b4a 100%);
             color: white;
-            padding: 40px 30px;
+            padding: 30px 30px 40px 30px;
             text-align: center;
+        }
+
+        .logo {
+            max-width: 350px;
+            width: 100%;
+            height: auto;
+            margin: 0 auto 20px auto;
+            display: block;
         }
 
         .header h1 {
@@ -45,7 +53,8 @@
 
         .header p {
             font-size: 16px;
-            opacity: 0.9;
+            opacity: 0.95;
+            line-height: 1.5;
         }
 
         .content {
@@ -63,13 +72,13 @@
         }
 
         .upload-area:hover {
-            border-color: #667eea;
-            background: #edf2f7;
+            border-color: #1a6b4a;
+            background: #edf7f1;
         }
 
         .upload-area.dragover {
-            border-color: #667eea;
-            background: #e6f2ff;
+            border-color: #0d5c3e;
+            background: #d4f4e0;
             transform: scale(1.02);
         }
 
@@ -80,8 +89,9 @@
 
         .upload-area h3 {
             font-size: 20px;
-            color: #2d3748;
+            color: #0d5c3e;
             margin-bottom: 10px;
+            font-weight: 600;
         }
 
         .upload-area p {
@@ -98,7 +108,7 @@
         }
 
         .file-type {
-            background: #667eea;
+            background: #0d5c3e;
             color: white;
             padding: 6px 14px;
             border-radius: 20px;
@@ -108,7 +118,7 @@
 
         .browse-button {
             display: inline-block;
-            background: #667eea;
+            background: #0d5c3e;
             color: white;
             padding: 12px 30px;
             border-radius: 25px;
@@ -121,9 +131,9 @@
         }
 
         .browse-button:hover {
-            background: #5568d3;
+            background: #1a6b4a;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 4px 12px rgba(13, 92, 62, 0.4);
         }
 
         #fileInput {
@@ -160,7 +170,7 @@
             display: block;
             background: #c6f6d5;
             color: #22543d;
-            border-left: 4px solid #38a169;
+            border-left: 4px solid #0d5c3e;
         }
 
         .status-message.error {
@@ -178,7 +188,7 @@
 
         .loader {
             border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
+            border-top: 3px solid #0d5c3e;
             border-radius: 50%;
             width: 20px;
             height: 20px;
@@ -200,10 +210,11 @@
             border-radius: 8px;
             font-size: 14px;
             line-height: 1.6;
+            border-left: 3px solid #0d5c3e;
         }
 
         .lead-details strong {
-            color: #2d3748;
+            color: #0d5c3e;
         }
 
         .footer {
@@ -212,6 +223,7 @@
             text-align: center;
             color: #718096;
             font-size: 13px;
+            border-top: 2px solid #0d5c3e;
         }
 
         .recent-uploads {
@@ -222,8 +234,9 @@
 
         .recent-uploads h3 {
             font-size: 16px;
-            color: #2d3748;
+            color: #0d5c3e;
             margin-bottom: 15px;
+            font-weight: 600;
         }
 
         .upload-item {
@@ -235,6 +248,7 @@
             justify-content: space-between;
             align-items: center;
             font-size: 14px;
+            border-left: 3px solid #0d5c3e;
         }
 
         .upload-item-name {
@@ -243,8 +257,9 @@
         }
 
         .upload-item-status {
-            color: #38a169;
+            color: #0d5c3e;
             font-size: 12px;
+            font-weight: 600;
         }
 
         @media (max-width: 640px) {
@@ -263,20 +278,24 @@
             .upload-area {
                 padding: 40px 15px;
             }
+
+            .logo {
+                max-width: 280px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>📋 Lead Upload Portal</h1>
-            <p>Upload construction bid documents to create ZOHO CRM leads</p>
+            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iNjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0idHJhbnNwYXJlbnQiLz4KICA8dGV4dCB4PSI1MCUiIHk9IjQwJSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPlRJRFkgU0VSVklDRVM8L3RleHQ+CiAgPHRleHQgeD0iNTAlIiB5PSI3MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPktlZXBpbmcgWW91ciBTaXRlIENsZWFuPC90ZXh0Pgo8L3N2Zz4=" alt="TIDY Services Logo" class="logo">
+            <p>Construction Bid Lead Upload Portal</p>
         </div>
 
         <div class="content">
             <div class="upload-area" id="uploadArea">
-                <div class="upload-icon">📄</div>
-                <h3>Drag & Drop Your File Here</h3>
+                <div class="upload-icon">🏗️</div>
+                <h3>Drag & Drop Your Bid Document Here</h3>
                 <p>or</p>
                 <button class="browse-button" onclick="document.getElementById('fileInput').click()">
                     Browse Files
@@ -291,13 +310,13 @@
             <div id="statusMessage" class="status-message"></div>
 
             <div class="recent-uploads" id="recentUploads" style="display: none;">
-                <h3>Recent Uploads</h3>
+                <h3>📋 Recent Uploads</h3>
                 <div id="uploadsList"></div>
             </div>
         </div>
 
         <div class="footer">
-            Powered by ZOHO Lead Parser • Max file size: 5MB
+            <strong>TIDY Services</strong> • Powered by ZOHO Lead Parser • Max file size: 5MB
         </div>
     </div>
 
@@ -352,7 +371,7 @@
             }
 
             // Show loading
-            showStatus('loading', `<div class="loader"></div> Uploading ${file.name}...`);
+            showStatus('loading', `<div class="loader"></div> Processing ${file.name}... Please wait.`);
 
             // Prepare form data
             const formData = new FormData();
@@ -378,15 +397,17 @@
                         const project = result.parsed_data.project_info;
 
                         leadInfo = `<div class="lead-details">
+                            <strong>✅ Lead Created Successfully in ZOHO CRM</strong><br><br>
                             <strong>Contact:</strong> ${contact.name || 'N/A'}<br>
                             <strong>Company:</strong> ${contact.company || 'N/A'}<br>
                             <strong>Email:</strong> ${contact.email || 'N/A'}<br>
                             <strong>Phone:</strong> ${contact.phone || 'N/A'}<br>
-                            ${project.project_name ? `<strong>Project:</strong> ${project.project_name}` : ''}
+                            ${project.project_name ? `<strong>Project:</strong> ${project.project_name}<br>` : ''}
+                            ${project.bid_date ? `<strong>Bid Date:</strong> ${project.bid_date}` : ''}
                         </div>`;
                     }
 
-                    showStatus('success', `✅ Success! Lead created in ZOHO CRM.${leadInfo}`);
+                    showStatus('success', `✅ Success! New lead added to ZOHO CRM.${leadInfo}`);
 
                     // Add to recent uploads
                     addToRecentUploads(file.name);
@@ -394,10 +415,10 @@
                     // Reset file input
                     fileInput.value = '';
                 } else {
-                    showStatus('error', `❌ Error: ${result.message || 'Failed to create lead. Please try again.'}`);
+                    showStatus('error', `❌ Error: ${result.message || 'Failed to create lead. Please contact support.'}`);
                 }
             } catch (error) {
-                showStatus('error', `❌ Upload failed: ${error.message}`);
+                showStatus('error', `❌ Upload failed: ${error.message}. Please check your connection and try again.`);
             }
         }
 
@@ -412,7 +433,7 @@
             item.className = 'upload-item';
             item.innerHTML = `
                 <span class="upload-item-name">📄 ${filename}</span>
-                <span class="upload-item-status">✓ Uploaded at ${now}</span>
+                <span class="upload-item-status">✓ ${now}</span>
             `;
 
             uploadsList.insertBefore(item, uploadsList.firstChild);
