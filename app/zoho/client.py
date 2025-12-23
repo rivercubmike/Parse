@@ -1,4 +1,5 @@
 """ZOHO CRM API client for creating leads."""
+import re
 import requests
 from typing import Dict, Optional
 from app.config import settings
@@ -11,6 +12,34 @@ class ZohoClient:
     def __init__(self):
         self.access_token: Optional[str] = None
         self.token_expires_at: Optional[int] = None
+
+    @staticmethod
+    def _clean_url(url: Optional[str]) -> Optional[str]:
+        """
+        Clean and validate a URL, extracting only the valid URL portion.
+
+        Args:
+            url: Raw URL string that may contain extra text
+
+        Returns:
+            Cleaned URL or None if invalid
+        """
+        if not url:
+            return None
+
+        # Extract first valid URL from the string
+        url_pattern = r'(https?://[^\s<>"{}|\\^`\[\]]+)'
+        match = re.search(url_pattern, url)
+
+        if match:
+            clean_url = match.group(1)
+            # Remove common trailing characters
+            clean_url = clean_url.rstrip('.,;:)')
+            # Validate it looks like a reasonable URL
+            if len(clean_url) > 10 and '.' in clean_url:
+                return clean_url
+
+        return None
 
     def _get_access_token(self) -> str:
         """
@@ -141,7 +170,7 @@ class ZohoClient:
             City=parsed_data.project_info.city,
             State=parsed_data.project_info.state,
             Zip_Code=parsed_data.project_info.zip_code,
-            Website=primary_contact.website,
+            Website=self._clean_url(primary_contact.website),
             Description=description,
             Annual_Revenue=parsed_data.project_info.valuation,  # Project value
             Industry=parsed_data.project_info.project_type,
