@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lead Upload - ZOHO CRM</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px 30px;
+        }
+
+        .upload-area {
+            border: 3px dashed #cbd5e0;
+            border-radius: 15px;
+            padding: 60px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: #f7fafc;
+        }
+
+        .upload-area:hover {
+            border-color: #667eea;
+            background: #edf2f7;
+        }
+
+        .upload-area.dragover {
+            border-color: #667eea;
+            background: #e6f2ff;
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .upload-area h3 {
+            font-size: 20px;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .upload-area p {
+            color: #718096;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .file-types {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .file-type {
+            background: #667eea;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .browse-button {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 14px;
+        }
+
+        .browse-button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .status-message {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .status-message.loading {
+            display: block;
+            background: #bee3f8;
+            color: #2c5282;
+            border-left: 4px solid #3182ce;
+        }
+
+        .status-message.success {
+            display: block;
+            background: #c6f6d5;
+            color: #22543d;
+            border-left: 4px solid #38a169;
+        }
+
+        .status-message.error {
+            display: block;
+            background: #fed7d7;
+            color: #742a2a;
+            border-left: 4px solid #e53e3e;
+        }
+
+        .status-icon {
+            font-size: 24px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .lead-details {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .lead-details strong {
+            color: #2d3748;
+        }
+
+        .footer {
+            padding: 20px 30px;
+            background: #f7fafc;
+            text-align: center;
+            color: #718096;
+            font-size: 13px;
+        }
+
+        .recent-uploads {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .recent-uploads h3 {
+            font-size: 16px;
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .upload-item {
+            padding: 12px;
+            background: #f7fafc;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .upload-item-name {
+            color: #2d3748;
+            font-weight: 500;
+        }
+
+        .upload-item-status {
+            color: #38a169;
+            font-size: 12px;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                margin: 0;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .content {
+                padding: 30px 20px;
+            }
+
+            .upload-area {
+                padding: 40px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 Lead Upload Portal</h1>
+            <p>Upload construction bid documents to create ZOHO CRM leads</p>
+        </div>
+
+        <div class="content">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📄</div>
+                <h3>Drag & Drop Your File Here</h3>
+                <p>or</p>
+                <button class="browse-button" onclick="document.getElementById('fileInput').click()">
+                    Browse Files
+                </button>
+                <input type="file" id="fileInput" accept=".pdf,.xlsx,.xls">
+                <div class="file-types">
+                    <span class="file-type">PDF</span>
+                    <span class="file-type">Excel</span>
+                </div>
+            </div>
+
+            <div id="statusMessage" class="status-message"></div>
+
+            <div class="recent-uploads" id="recentUploads" style="display: none;">
+                <h3>Recent Uploads</h3>
+                <div id="uploadsList"></div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Powered by ZOHO Lead Parser • Max file size: 5MB
+        </div>
+    </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const statusMessage = document.getElementById('statusMessage');
+        const recentUploads = document.getElementById('recentUploads');
+        const uploadsList = document.getElementById('uploadsList');
+
+        // Drag and drop handlers
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFileUpload(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileUpload(e.target.files[0]);
+            }
+        });
+
+        async function handleFileUpload(file) {
+            // Validate file type
+            const validTypes = ['.pdf', '.xlsx', '.xls'];
+            const fileExt = '.' + file.name.split('.').pop().toLowerCase();
+
+            if (!validTypes.includes(fileExt)) {
+                showStatus('error', '❌ Invalid file type. Please upload a PDF or Excel file.');
+                return;
+            }
+
+            // Validate file size (5MB)
+            const maxSize = 5 * 1024 * 1024;
+            if (file.size > maxSize) {
+                showStatus('error', '❌ File too large. Maximum size is 5MB.');
+                return;
+            }
+
+            // Show loading
+            showStatus('loading', `<div class="loader"></div> Uploading ${file.name}...`);
+
+            // Prepare form data
+            const formData = new FormData();
+            formData.append('file', file);
+
+            // Determine endpoint
+            const endpoint = fileExt === '.pdf' ? '/upload/pdf' : '/upload/excel';
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    // Success!
+                    let leadInfo = '';
+
+                    if (result.parsed_data && result.parsed_data.owner_contact) {
+                        const contact = result.parsed_data.owner_contact;
+                        const project = result.parsed_data.project_info;
+
+                        leadInfo = `<div class="lead-details">
+                            <strong>Contact:</strong> ${contact.name || 'N/A'}<br>
+                            <strong>Company:</strong> ${contact.company || 'N/A'}<br>
+                            <strong>Email:</strong> ${contact.email || 'N/A'}<br>
+                            <strong>Phone:</strong> ${contact.phone || 'N/A'}<br>
+                            ${project.project_name ? `<strong>Project:</strong> ${project.project_name}` : ''}
+                        </div>`;
+                    }
+
+                    showStatus('success', `✅ Success! Lead created in ZOHO CRM.${leadInfo}`);
+
+                    // Add to recent uploads
+                    addToRecentUploads(file.name);
+
+                    // Reset file input
+                    fileInput.value = '';
+                } else {
+                    showStatus('error', `❌ Error: ${result.message || 'Failed to create lead. Please try again.'}`);
+                }
+            } catch (error) {
+                showStatus('error', `❌ Upload failed: ${error.message}`);
+            }
+        }
+
+        function showStatus(type, message) {
+            statusMessage.className = `status-message ${type}`;
+            statusMessage.innerHTML = message;
+        }
+
+        function addToRecentUploads(filename) {
+            const now = new Date().toLocaleTimeString();
+            const item = document.createElement('div');
+            item.className = 'upload-item';
+            item.innerHTML = `
+                <span class="upload-item-name">📄 ${filename}</span>
+                <span class="upload-item-status">✓ Uploaded at ${now}</span>
+            `;
+
+            uploadsList.insertBefore(item, uploadsList.firstChild);
+            recentUploads.style.display = 'block';
+
+            // Keep only last 5 uploads
+            while (uploadsList.children.length > 5) {
+                uploadsList.removeChild(uploadsList.lastChild);
+            }
+        }
+    </script>
+</body>
+</html>

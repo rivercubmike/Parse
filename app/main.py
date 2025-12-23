@@ -3,7 +3,8 @@ import os
 import gc
 import tempfile
 from fastapi import FastAPI, File, UploadFile, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, HTMLResponse
+from fastapi.staticfiles import StaticFiles
 from typing import List
 from app.parsers.pdf_parser import PDFParser
 from app.parsers.excel_parser import ExcelParser
@@ -21,13 +22,23 @@ app = FastAPI(
     version="1.0.0"
 )
 
+# Mount static files directory
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 pdf_parser = PDFParser()
 excel_parser = ExcelParser()
 zoho_client = ZohoClient()
 
 
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 async def root():
+    """Serve the main upload interface."""
+    with open("static/index.html", "r") as f:
+        return f.read()
+
+
+@app.get("/api/health")
+async def health_check():
     """Health check endpoint."""
     return {
         "message": "ZOHO Lead Parser API",
